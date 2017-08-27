@@ -37,7 +37,7 @@ public class ScrollingSearchExampleFragment extends BaseExampleFragment implemen
 
     private boolean mIsDarkSearchTheme = false;
 
-    private String mLastQuery = "";
+    private CharSequence mLastQuery = "";
 
     public ScrollingSearchExampleFragment() {
         // Required empty public constructor

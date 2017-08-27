@@ -45,7 +45,7 @@ public class SlidingSearchViewExampleFragment extends BaseExampleFragment {
 
     private boolean mIsDarkSearchTheme = false;
 
-    private String mLastQuery = "";
+    private CharSequence mLastQuery = "";
 
     public SlidingSearchViewExampleFragment() {
         // Required empty public constructor

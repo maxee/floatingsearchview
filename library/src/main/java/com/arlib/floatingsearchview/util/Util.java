@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -33,9 +34,12 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import java.util.Locale;
 
 public class Util {
 
@@ -127,18 +131,37 @@ public class Util {
     public static void removeGlobalLayoutObserver(View view, ViewTreeObserver.OnGlobalLayoutListener layoutListener) {
         if (Build.VERSION.SDK_INT < 16) {
             view.getViewTreeObserver().removeGlobalOnLayoutListener(layoutListener);
-        } else {
+        }
+        else {
             view.getViewTreeObserver().removeOnGlobalLayoutListener(layoutListener);
         }
     }
 
-    public static Activity getHostActivity(Context context) {
-        while (context instanceof ContextWrapper) {
-            if (context instanceof Activity) {
+    public static Activity getHostActivity(Context context)
+    {
+        while (context instanceof ContextWrapper)
+        {
+            if (context instanceof Activity)
+            {
                 return (Activity) context;
             }
             context = ((ContextWrapper) context).getBaseContext();
         }
         return null;
+    }
+
+    public static void setImeAction(@NonNull EditText editText, int imeAction) {
+        if ((imeAction & ~EditorInfo.IME_MASK_ACTION) != 0) {
+            throw new IllegalArgumentException(
+                    String.format(Locale.US, "The value %x is not a valid ime action", imeAction)
+            );
+        }
+        int currentImeOptions = editText.getImeOptions();
+        int imeOptionsWithoutAction = currentImeOptions & ~EditorInfo.IME_MASK_ACTION;
+        editText.setImeOptions(imeOptionsWithoutAction | imeAction);
+    }
+
+    public static void addImeFlag(@NonNull EditText editText, int imeOption) {
+        editText.setImeOptions(editText.getImeOptions() | imeOption);
     }
 }

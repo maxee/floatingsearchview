@@ -539,6 +539,7 @@ public class FloatingSearchView extends FrameLayout {
 
         mSearchInput.setTextColor(mSearchInputTextColor);
         mSearchInput.setHintTextColor(mSearchInputHintColor);
+        Util.addImeFlag(mSearchInput, EditorInfo.IME_FLAG_NO_FULLSCREEN);
 
         if (!isInEditMode() && mHostActivity != null) {
             mHostActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -1098,9 +1099,9 @@ public class FloatingSearchView extends FrameLayout {
     public void setShowSearchKey(boolean show) {
         mShowSearchKey = show;
         if (show) {
-            mSearchInput.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+            Util.setImeAction(mSearchInput, EditorInfo.IME_ACTION_SEARCH);
         } else {
-            mSearchInput.setImeOptions(EditorInfo.IME_ACTION_NONE);
+            Util.setImeAction(mSearchInput, EditorInfo.IME_ACTION_NONE);
         }
     }
 

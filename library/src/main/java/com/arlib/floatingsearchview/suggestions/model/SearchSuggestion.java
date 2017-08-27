@@ -23,7 +23,8 @@ import android.os.Parcelable;
  * in the suggestions drop down generated in response
  * to an entered query in the {@link com.arlib.floatingsearchview.FloatingSearchView}
  */
-public interface SearchSuggestion extends Parcelable{
+public interface SearchSuggestion extends Parcelable
+{
 
     /**
      * Returns the text that should be displayed
@@ -31,6 +32,5 @@ public interface SearchSuggestion extends Parcelable{
      *
      * @return the text for this suggestion
      */
-    String getBody();
-
+    CharSequence getBody();
 }
