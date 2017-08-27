@@ -7,4 +7,9 @@
 /build
 /captures
 /notes
+<<<<<<< HEAD
 **/*.iml
+=======
+*.iml
+**/build
+>>>>>>> a0f8fbc90d98eb1b629c6295dd2d3577412e7b1e

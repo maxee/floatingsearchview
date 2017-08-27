@@ -7,12 +7,23 @@ An implementation of a floating search box with search suggestions, also called 
 ![Alt text](/images/1506tq.gif)
 ![Alt text](/images/1508kn.gif)
 
+
+Note
+-----
+
+This project is not being actively maintained. Have a look [here](https://github.com/arimorty/floatingsearchview/wiki) for information
+that might help you make changes to your own copy of the code base.
+
+
+...
+
+
 Usage
 -----
 
 1. In your dependencies, add
     ```
-         compile 'com.github.arimorty:floatingsearchview:2.0.3'
+         compile 'com.github.arimorty:floatingsearchview:2.1.1'
     ```
 2. Add a FloatingSearchView to your view hierarchy, and make sure that it takes
    up the full width and height of the screen
@@ -146,6 +157,7 @@ First, implement [SearchSuggestion](https://github.com/arimorty/floatingsearchvi
 
 Set a callback for when a given suggestion is bound to the suggestion list.
 
+For the history icons to show, you would need to implement this. Refer to the sample app for an [example implementation](https://github.com/arimorty/floatingsearchview/blob/master/sample/src/main/java/com/arlib/floatingsearchviewdemo/fragment/ScrollingSearchExampleFragment.java#L222).
 ``` 
    mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
             @Override
@@ -170,7 +182,8 @@ Available styling:
 ```xml
    <style name="SearchView">
            <item name="floatingSearch_backgroundColor"></item>
-           <item name="floatingSearch_viewTextColor"></item>
+           <item name="floatingSearch_viewSearchInputTextColor"></item>
+           <item name="floatingSearch_viewSuggestionItemTextColor"></item>
            <item name="floatingSearch_hintTextColor"></item>
            <item name="floatingSearch_dividerColor"></item>
            <item name="floatingSearch_clearBtnColor"></item>
@@ -178,11 +191,22 @@ Available styling:
            <item name="floatingSearch_menuItemIconColor"></item>
            <item name="floatingSearch_suggestionRightIconColor"></item>
            <item name="floatingSearch_actionMenuOverflowColor"></item>
-    </style>
+   </style>
+```
+### RxBinding Extension
+The RxBinding library allows you to listen for query changes using RxJava Obervables. 
+
+```java
+Observable<CharSequence> queryObservable = RxFloatingSearchView.queryChanges(view);
+queryObservable.doOnNext { query -> Toast.makeText(this, "Query is %s".format(query), Toast.LENGTH_LONG).show() }.subscribe();
 ```
 
-### Are you using this library?
-If you have any questions, issues, or just want to let me know how you are using this library, feel free to create a [new issue](https://github.com/arimorty/floatingsearchview/issues/new) or add a comment in the [feedback issue](https://github.com/arimorty/floatingsearchview/issues/106) and let me know. All feedback is well appreciated!
+### The Kotlin Extension
+The Kotlin extension adds an extension function to the view for more goodness.
+
+```kotlin
+view.queryChanges(5).doOnNext { query -> Toast.makeText(this, "Query is %s".format(query), Toast.LENGTH_LONG).show() }.subscribe()
+```
 
 
 License

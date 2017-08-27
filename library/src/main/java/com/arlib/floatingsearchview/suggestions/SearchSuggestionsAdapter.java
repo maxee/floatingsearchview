@@ -33,13 +33,14 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.arlib.floatingsearchview.util.Util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "SearchSuggestionsAdapter";
 
-    private List<SearchSuggestion> mSearchSuggestions = new ArrayList<>();
+    private List<? extends SearchSuggestion> mSearchSuggestions = new ArrayList<>();
 
     private Listener mListener;
 
@@ -126,8 +127,7 @@ public class SearchSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public void swapData(List<? extends SearchSuggestion> searchSuggestions) {
-        mSearchSuggestions.clear();
-        mSearchSuggestions.addAll(searchSuggestions);
+        mSearchSuggestions = searchSuggestions;
         notifyDataSetChanged();
     }
 
@@ -190,6 +190,14 @@ public class SearchSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.
         SearchSuggestion suggestionItem = mSearchSuggestions.get(position);
         viewHolder.body.setText(suggestionItem.getBody());
 
+        if(mTextColor != -1){
+            viewHolder.body.setTextColor(mTextColor);
+        }
+
+        if(mRightIconColor != -1){
+            Util.setIconColor(viewHolder.rightIcon, mRightIconColor);
+        }
+
         if (mOnBindSuggestionCallback != null) {
             mOnBindSuggestionCallback.onBindSuggestion(viewHolder.itemView, viewHolder.leftIcon, viewHolder.body,
                     suggestionItem, position);
@@ -247,5 +255,10 @@ public class SearchSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.
         if (notify) {
             notifyDataSetChanged();
         }
+    }
+
+    public void reverseList() {
+        Collections.reverse(mSearchSuggestions);
+        notifyDataSetChanged();
     }
 }

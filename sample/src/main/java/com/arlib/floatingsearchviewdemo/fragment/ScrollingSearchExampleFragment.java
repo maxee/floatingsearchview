@@ -1,14 +1,9 @@
 package com.arlib.floatingsearchviewdemo.fragment;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.Html;
 import android.util.Log;
@@ -26,57 +21,47 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.arlib.floatingsearchview.util.Util;
 import com.arlib.floatingsearchviewdemo.R;
 import com.arlib.floatingsearchviewdemo.data.ColorSuggestion;
+import com.arlib.floatingsearchviewdemo.data.ColorWrapper;
 import com.arlib.floatingsearchviewdemo.data.DataHelper;
 
 import java.util.List;
 
 
-public class SlidingSearchViewExampleFragment extends BaseExampleFragment {
+public class ScrollingSearchExampleFragment extends BaseExampleFragment implements AppBarLayout.OnOffsetChangedListener {
     private final String TAG = "BlankFragment";
 
     public static final long FIND_SUGGESTION_SIMULATED_DELAY = 250;
 
-    private static final long ANIM_DURATION = 350;
-
-    private View mHeaderView;
-    private View mDimSearchViewBackground;
-    private ColorDrawable mDimDrawable;
     private FloatingSearchView mSearchView;
+    private AppBarLayout mAppBar;
 
     private boolean mIsDarkSearchTheme = false;
 
     private String mLastQuery = "";
 
-    public SlidingSearchViewExampleFragment() {
+    public ScrollingSearchExampleFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_sliding_search_example, container, false);
+        return inflater.inflate(R.layout.fragment_scrolling_search_example, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mSearchView = (FloatingSearchView) view.findViewById(R.id.floating_search_view);
-        mHeaderView = view.findViewById(R.id.header_view);
+        mAppBar = (AppBarLayout) view.findViewById(R.id.appbar);
 
-        mDimSearchViewBackground = view.findViewById(R.id.dim_background);
-        mDimDrawable = new ColorDrawable(Color.BLACK);
-        mDimDrawable.setAlpha(0);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            mDimSearchViewBackground.setBackground(mDimDrawable);
-        } else {
-            mDimSearchViewBackground.setBackgroundDrawable(mDimDrawable);
-        }
+        mAppBar.addOnOffsetChangedListener(this);
 
-        setupFloatingSearch();
         setupDrawer();
+        setupSearchBar();
     }
 
-    private void setupFloatingSearch() {
+    private void setupSearchBar() {
         mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
 
             @Override
@@ -119,6 +104,18 @@ public class SlidingSearchViewExampleFragment extends BaseExampleFragment {
             @Override
             public void onSuggestionClicked(final SearchSuggestion searchSuggestion) {
 
+                ColorSuggestion colorSuggestion = (ColorSuggestion) searchSuggestion;
+                DataHelper.findColors(getActivity(), colorSuggestion.getBody(),
+                        new DataHelper.OnFindColorsListener() {
+
+                            @Override
+                            public void onResults(List<ColorWrapper> results) {
+                                //show search results
+                            }
+
+                        });
+                Log.d(TAG, "onSuggestionClicked()");
+
                 mLastQuery = searchSuggestion.getBody();
             }
 
@@ -126,6 +123,15 @@ public class SlidingSearchViewExampleFragment extends BaseExampleFragment {
             public void onSearchAction(String query) {
                 mLastQuery = query;
 
+                DataHelper.findColors(getActivity(), query,
+                        new DataHelper.OnFindColorsListener() {
+
+                            @Override
+                            public void onResults(List<ColorWrapper> results) {
+                                 //show search results
+                            }
+
+                        });
                 Log.d(TAG, "onSearchAction()");
             }
         });
@@ -133,33 +139,15 @@ public class SlidingSearchViewExampleFragment extends BaseExampleFragment {
         mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
             @Override
             public void onFocus() {
-                int headerHeight = getResources().getDimensionPixelOffset(R.dimen.sliding_search_view_header_height);
-                ObjectAnimator anim = ObjectAnimator.ofFloat(mSearchView, "translationY",
-                        headerHeight, 0);
-                anim.setDuration(350);
-                fadeDimBackground(0, 150, null);
-                anim.addListener(new AnimatorListenerAdapter() {
 
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        //show suggestions when search bar gains focus (typically history suggestions)
-                        mSearchView.swapSuggestions(DataHelper.getHistory(getActivity(), 3));
-
-                    }
-                });
-                anim.start();
+                //show suggestions when search bar gains focus (typically history suggestions)
+                mSearchView.swapSuggestions(DataHelper.getHistory(getActivity(), 3));
 
                 Log.d(TAG, "onFocus()");
             }
 
             @Override
             public void onFocusCleared() {
-                int headerHeight = getResources().getDimensionPixelOffset(R.dimen.sliding_search_view_header_height);
-                ObjectAnimator anim = ObjectAnimator.ofFloat(mSearchView, "translationY",
-                        0, headerHeight);
-                anim.setDuration(350);
-                anim.start();
-                fadeDimBackground(150, 0, null);
 
                 //set the title of the bar so that when focus is returned a new query begins
                 mSearchView.setSearchBarTitle(mLastQuery);
@@ -179,7 +167,8 @@ public class SlidingSearchViewExampleFragment extends BaseExampleFragment {
             @Override
             public boolean onMenuItemClick(MenuItem item)
             {
-                if (item.getItemId() == R.id.action_change_colors) {
+                if (item.getItemId() == R.id.action_change_colors)
+                {
 
                     mIsDarkSearchTheme = true;
 
@@ -193,13 +182,14 @@ public class SlidingSearchViewExampleFragment extends BaseExampleFragment {
                     mSearchView.setClearBtnColor(Color.parseColor("#e9e9e9"));
                     mSearchView.setDividerColor(Color.parseColor("#BEBEBE"));
                     mSearchView.setLeftActionIconColor(Color.parseColor("#e9e9e9"));
-                } else {
+                }
+                else
+                {
 
                     //just print action
                     Toast.makeText(getActivity().getApplicationContext(), item.getTitle(),
                             Toast.LENGTH_SHORT).show();
                 }
-
                 return true;
             }
         });
@@ -252,22 +242,12 @@ public class SlidingSearchViewExampleFragment extends BaseExampleFragment {
             }
 
         });
-
-        /*
-         * When the user types some text into the search field, a clear button (and 'x' to the
-         * right) of the search text is shown.
-         *
-         * This listener provides a callback for when this button is clicked.
-         */
-        mSearchView.setOnClearSearchActionListener(new FloatingSearchView.OnClearSearchActionListener() {
-            @Override
-            public void onClearSearchClicked() {
-
-                Log.d(TAG, "onClearSearchClicked()");
-            }
-        });
     }
 
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        mSearchView.setTranslationY(verticalOffset);
+    }
 
     @Override
     public boolean onActivityBackPress() {
@@ -283,22 +263,5 @@ public class SlidingSearchViewExampleFragment extends BaseExampleFragment {
 
     private void setupDrawer() {
         attachSearchViewActivityDrawer(mSearchView);
-    }
-
-    private void fadeDimBackground(int from, int to, Animator.AnimatorListener listener) {
-        ValueAnimator anim = ValueAnimator.ofInt(from, to);
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-
-                int value = (Integer) animation.getAnimatedValue();
-                mDimDrawable.setAlpha(value);
-            }
-        });
-        if (listener != null) {
-            anim.addListener(listener);
-        }
-        anim.setDuration(ANIM_DURATION);
-        anim.start();
     }
 }

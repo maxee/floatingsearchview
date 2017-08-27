@@ -18,6 +18,7 @@ package com.arlib.floatingsearchview.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -47,7 +48,7 @@ public class Util {
             public void run() {
 
                 InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+                inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
             }
         }, 100);
     }
@@ -129,5 +130,15 @@ public class Util {
         } else {
             view.getViewTreeObserver().removeOnGlobalLayoutListener(layoutListener);
         }
+    }
+
+    public static Activity getHostActivity(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity) context;
+            }
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        return null;
     }
 }

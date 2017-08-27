@@ -109,6 +109,10 @@ public class MenuView extends LinearLayout {
         init();
     }
 
+    public List<MenuItemImpl> getCurrentMenuItems(){
+        return mMenuItems;
+    }
+
     private void init() {
         mMenuBuilder = new MenuBuilder(getContext());
         mActionIconColor = Util.getColor(getContext(), R.color.gray_active_icon);
@@ -209,6 +213,7 @@ public class MenuView extends LinearLayout {
                 if (menuItem.getIcon() != null) {
 
                     ImageView action = createActionView();
+                    action.setContentDescription(menuItem.getTitle());
                     action.setImageDrawable(menuItem.getIcon());
                     Util.setIconColor(action, mActionIconColor);
                     addView(action);
