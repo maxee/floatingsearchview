@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.1.2-4'
+    ext.kotlin_version = '1.2.30'
     repositories {
         mavenCentral()
     }
@@ -12,16 +12,16 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 11
         versionName "2.0.4"
     }
-    sourceSets{
+    sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
 }
