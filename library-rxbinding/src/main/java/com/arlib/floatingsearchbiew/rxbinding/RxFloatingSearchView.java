@@ -1,10 +1,10 @@
 package com.arlib.floatingsearchbiew.rxbinding;
 
-import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
-
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.jakewharton.rxbinding2.InitialValueObservable;
+
+import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
 
 public final class RxFloatingSearchView {
 

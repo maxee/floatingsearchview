@@ -2,9 +2,6 @@ package com.arlib.floatingsearchviewdemo.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.content.res.ResourcesCompat;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,8 +20,12 @@ import com.arlib.floatingsearchviewdemo.R;
 import com.arlib.floatingsearchviewdemo.data.ColorSuggestion;
 import com.arlib.floatingsearchviewdemo.data.ColorWrapper;
 import com.arlib.floatingsearchviewdemo.data.DataHelper;
+import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.List;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
 
 public class ScrollingSearchExampleFragment extends BaseExampleFragment implements AppBarLayout.OnOffsetChangedListener {

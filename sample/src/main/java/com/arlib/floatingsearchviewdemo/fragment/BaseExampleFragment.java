@@ -1,9 +1,10 @@
 package com.arlib.floatingsearchviewdemo.fragment;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by ari on 8/16/16.

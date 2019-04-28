@@ -17,11 +17,6 @@ package com.arlib.floatingsearchviewdemo;
  */
 
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
@@ -29,8 +24,14 @@ import com.arlib.floatingsearchviewdemo.fragment.BaseExampleFragment;
 import com.arlib.floatingsearchviewdemo.fragment.ScrollingSearchExampleFragment;
 import com.arlib.floatingsearchviewdemo.fragment.SlidingSearchResultsExampleFragment;
 import com.arlib.floatingsearchviewdemo.fragment.SlidingSearchViewExampleFragment;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity
         implements BaseExampleFragment.BaseExampleFragmentCallbacks, NavigationView.OnNavigationItemSelectedListener {
