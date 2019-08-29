@@ -1823,7 +1823,7 @@ public class FloatingSearchView extends FrameLayout {
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         SavedState savedState = new SavedState(superState);
-        savedState.suggestions = mSuggestionsAdapter.getDataSet();
+      //  savedState.suggestions = mSuggestionsAdapter.getDataSet();
         savedState.isFocused = mIsFocused;
         savedState.query = getQuery();
         savedState.suggestionTextSize = mSuggestionsTextSizePx;
@@ -1895,7 +1895,11 @@ public class FloatingSearchView extends FrameLayout {
             mSuggestionSecHeightListener = new OnSuggestionSecHeightSetListener() {
                 @Override
                 public void onSuggestionSecHeightSet() {
-                    swapSuggestions(savedState.suggestions, false);
+                    if(savedState.suggestions != null)
+                    {
+                        swapSuggestions(savedState.suggestions, false);
+                    }
+
                     mSuggestionSecHeightListener = null;
 
                     //todo refactor move to a better location
